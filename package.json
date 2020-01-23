@@ -1,9 +1,9 @@
 {
-  "name": "marp-vscode",
-  "displayName": "Marp for VS Code",
-  "publisher": "marp-team",
+  "name": "marp-vscode-extended",
+  "displayName": "Marp for VS Code (Extended)",
+  "publisher": "MiguelDomingues",
   "version": "0.12.0",
-  "description": "Create slide deck written in Marp Markdown on VS Code",
+  "description": "Create slide deck written in Marp Markdown on VS Code. Extended with Markdown It Plugins",
   "categories": [
     "Other"
   ],
@@ -23,11 +23,15 @@
     {
       "name": "Yuki Hattori",
       "url": "https://github.com/yhatt"
+    },
+    {
+      "name": "Miguel Domingues",
+      "url": "https://github.com/MiguelDomingues"
     }
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/marp-team/marp-vscode"
+    "url": "https://github.com/MiguelDomingues/marp-vscode"
   },
   "engines": {
     "vscode": "^1.36.0"
@@ -47,12 +51,12 @@
   "contributes": {
     "commands": [
       {
-        "category": "Marp",
+        "category": "Marp (Extended)",
         "command": "markdown.marp.export",
         "title": "Export slide deck..."
       },
       {
-        "category": "Marp",
+        "category": "Marp (Extended)",
         "command": "markdown.marp.showQuickPick",
         "title": "Show quick pick of Marp commands...",
         "icon": {
@@ -61,14 +65,14 @@
         }
       },
       {
-        "category": "Marp",
+        "category": "Marp (Extended)",
         "command": "markdown.marp.toggleMarpPreview",
         "title": "Toggle Marp preview for current Markdown"
       }
     ],
     "configuration": {
       "type": "object",
-      "title": "Marp for VS Code",
+      "title": "Marp for VS Code (Extended)",
       "properties": {
         "markdown.marp.breaks": {
           "type": "string",
@@ -94,6 +98,11 @@
           "type": "boolean",
           "default": false,
           "description": "Enables all HTML elements in Marp Markdown."
+        },
+        "markdown.marp.enableExtensionAttrs": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enables markdown-it-attrs extension on top of original marp-vscode."
         },
         "markdown.marp.exportType": {
           "type": "string",
@@ -226,6 +235,7 @@
     "jest-junit": "^10.0.0",
     "lodash.debounce": "^4.0.8",
     "markdown-it": "^10.0.0",
+    "markdown-it-attrs": "git://github.com/MiguelDomingues/markdown-it-attrs#0f4f908",
     "nanoid": "^2.1.9",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1",
@@ -250,6 +260,7 @@
   "dependencies": {
     "@marp-team/marp-cli": "^0.17.0",
     "@marp-team/marp-core": "^1.0.1",
+    "@types/node": "^13.1.6",
     "axios": "^0.19.1"
   }
 }
