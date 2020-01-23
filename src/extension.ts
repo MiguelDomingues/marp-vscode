@@ -16,7 +16,6 @@ import markdownItAttrs from 'markdown-it-attrs'
 const shouldRefreshConfs = [
   'markdown.marp.breaks',
   'markdown.marp.enableHtml',
-  'markdown.marp.enableExtensionAttrs',
   'markdown.marp.themes',
   'markdown.preview.breaks',
 ]
@@ -47,15 +46,11 @@ export function extendMarkdownIt(md: any) {
         return undefined
       })()
 
-      const marpOptions = marpCoreOptionForPreview(md.options)
-      let marp = new Marp(marpOptions)
+      const marp = new Marp(marpCoreOptionForPreview(md.options))
         .use(customTheme)
         .use(outline)
         .use(lineNumber)
-
-      if (marpOptions.extensionAttrs) {
-        marp = marp.use(markdownItAttrs)
-      }
+        .use(markdownItAttrs)
 
       // Load custom themes
       Promise.all(

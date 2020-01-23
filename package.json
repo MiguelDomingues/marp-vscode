@@ -99,11 +99,6 @@
           "default": false,
           "description": "Enables all HTML elements in Marp Markdown."
         },
-        "markdown.marp.enableExtensionAttrs": {
-          "type": "boolean",
-          "default": true,
-          "description": "Enables markdown-it-attrs extension on top of original marp-vscode."
-        },
         "markdown.marp.exportType": {
           "type": "string",
           "enum": [
@@ -235,7 +230,7 @@
     "jest-junit": "^10.0.0",
     "lodash.debounce": "^4.0.8",
     "markdown-it": "^10.0.0",
-    "markdown-it-attrs": "^3.0.1",
+    "markdown-it-attrs": "git://github.com/MiguelDomingues/markdown-it-attrs.git#10dd01c",
     "nanoid": "^2.1.9",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.19.1",
