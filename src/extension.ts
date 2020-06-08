@@ -54,14 +54,14 @@ export function extendMarkdownIt(md: any) {
 
       // Load custom themes
       Promise.all(
-        themes.loadStyles(baseFolder).map(p =>
+        themes.loadStyles(baseFolder).map((p) =>
           p.then(
-            theme => theme.registered,
-            e => console.error(e)
+            (theme) => theme.registered,
+            (e) => console.error(e)
           )
         )
-      ).then(registered => {
-        if (registered.some(f => f === true)) {
+      ).then((registered) => {
+        if (registered.some((f) => f === true)) {
           commands.executeCommand('markdown.preview.refresh')
         }
       })
@@ -121,8 +121,8 @@ export const activate = ({ subscriptions }: ExtensionContext) => {
       toggleMarpPreview
     ),
     themes,
-    workspace.onDidChangeConfiguration(e => {
-      if (shouldRefreshConfs.some(c => e.affectsConfiguration(c))) {
+    workspace.onDidChangeConfiguration((e) => {
+      if (shouldRefreshConfs.some((c) => e.affectsConfiguration(c))) {
         clearMarpCoreOptionCache()
         commands.executeCommand('markdown.preview.refresh')
       }

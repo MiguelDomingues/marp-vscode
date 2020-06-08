@@ -2,6 +2,28 @@
 
 ## [Unreleased]
 
+## v0.13.0 - 2020-04-18
+
+### Breaking
+
+- VS Code >= 1.40 ([Electron >= 6](https://code.visualstudio.com/updates/v1_40#_electron-60-update)) is now required ([#138](https://github.com/marp-team/marp-vscode/pull/138))
+
+### Changed
+
+- Upgrade to [Marp Core v1.1.1](https://github.com/marp-team/marp-core/releases/v1.1.1) and [Marp CLI v0.17.4](https://github.com/marp-team/marp-cli/releases/v0.17.4) ([#137](https://github.com/marp-team/marp-vscode/pull/137))
+- Upgrade dependent packages to the latest version ([#130](https://github.com/marp-team/marp-vscode/pull/130), [#137](https://github.com/marp-team/marp-vscode/pull/137))
+
+## v0.12.1 - 2020-02-23
+
+### Fixed
+
+- Fix failing PDF/PPTX/image export with [Snapd Chromium](https://snapcraft.io/install/chromium/ubuntu), by bumped [Marp CLI v0.17.1](https://github.com/marp-team/marp-cli/releases/tag/v0.17.1) ([#94](https://github.com/marp-team/marp-vscode/issues/94), [#127](https://github.com/marp-team/marp-vscode/pull/127))
+
+### Changed
+
+- Upgrade Marp CLI to [v0.17.1](https://github.com/marp-team/marp-cli/releases/v0.17.1) ([#127](https://github.com/marp-team/marp-vscode/pull/127))
+- Upgrade development Node and dependent packages to the latest version ([#127](https://github.com/marp-team/marp-vscode/pull/127))
+
 ## v0.12.0 - 2020-01-21
 
 ### Added

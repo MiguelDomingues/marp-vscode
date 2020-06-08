@@ -87,7 +87,7 @@ export const env = {
 }
 
 export const languages = {
-  createDiagnosticCollection: jest.fn(name => ({
+  createDiagnosticCollection: jest.fn((name) => ({
     name,
     delete: jest.fn(),
     set: jest.fn(),
@@ -119,7 +119,7 @@ export const workspace = {
   getConfiguration: jest.fn((section?: string) => ({
     get: jest.fn(
       (subSection?: string) =>
-        currentConf[[section, subSection].filter(s => s).join('.')]
+        currentConf[[section, subSection].filter((s) => s).join('.')]
     ),
   })),
   getWorkspaceFolder: jest.fn(),
