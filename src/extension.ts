@@ -16,6 +16,7 @@ import markdownItAttrs from 'markdown-it-attrs'
 const shouldRefreshConfs = [
   'markdown.marp.breaks',
   'markdown.marp.enableHtml',
+  'markdown.marp.mathTypesetting',
   'markdown.marp.themes',
   'markdown.preview.breaks',
 ]
