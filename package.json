@@ -2,7 +2,7 @@
   "name": "marp-vscode-extended",
   "displayName": "Marp for VS Code (Extended)",
   "publisher": "MiguelDomingues",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Create slide deck written in Marp Markdown on VS Code. Extended with Markdown It Plugins. Based on https://github.com/marp-team/marp-vscode",
   "categories": [
     "Other"
@@ -34,7 +34,7 @@
     "url": "https://github.com/MiguelDomingues/marp-vscode"
   },
   "engines": {
-    "vscode": "^1.40.0"
+    "vscode": "^1.43.0"
   },
   "main": "./lib/extension.js",
   "icon": "images/icon.png",
@@ -86,7 +86,7 @@
           "markdownEnumDescriptions": [
             "Ignore line-breaks in rendered Marp Markdown preview.",
             "Show line-breaks in rendered Marp Markdown preview. It is the default setting of Marp ecosystem.",
-            "Use inherited setting from `markdown.preview.breaks`."
+            "Use inherited setting from `#markdown.preview.breaks#`."
           ]
         },
         "markdown.marp.chromePath": {
@@ -134,7 +134,7 @@
         "markdown.marp.themes": {
           "type": "array",
           "default": [],
-          "markdownDescription": "A list of URLs or local paths to additional [theme CSS](https://marpit.marp.app/theme-css) for Marp core and Marpit framework. The rule for paths is following [Markdown: Styles](#markdown.styles).",
+          "markdownDescription": "A list of URLs or local paths to additional [theme CSS](https://marpit.marp.app/theme-css) for Marp core and Marpit framework. The rule for paths is following `#markdown.styles#`.",
           "items": {
             "type": "string"
           }
@@ -212,7 +212,7 @@
     "format": "prettier \"**/*.{css,js,json,md,scss,ts,yaml,yml}\"",
     "format:write": "yarn -s format --write",
     "lint:css": "stylelint \"./*.{css,scss}\"",
-    "lint:ts": "tslint \"{src,test}/**/*.ts\"",
+    "lint:js": "eslint --ext .js,.ts --report-unused-disable-directives --cache .",
     "package": "npx vsce package",
     "preversion": "run-p check:* lint:* test:*:coverage",
     "test:unit": "jest",
@@ -223,47 +223,50 @@
     "watch": "rollup -w -c ./rollup.config.js"
   },
   "devDependencies": {
-    "@rollup/plugin-alias": "^3.1.1",
-    "@rollup/plugin-commonjs": "^13.0.0",
+    "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^8.0.1",
-    "@rollup/plugin-typescript": "^4.1.2",
-    "@types/jest": "^26.0.0",
+    "@rollup/plugin-node-resolve": "^8.4.0",
+    "@rollup/plugin-typescript": "^5.0.2",
+    "@types/jest": "^26.0.7",
     "@types/lodash.debounce": "^4.0.6",
     "@types/markdown-it": "^10.0.1",
-    "@types/vscode": "~1.40.0",
+    "@types/vscode": "~1.43.0",
     "@types/yaml": "^1.9.7",
+    "@typescript-eslint/eslint-plugin": "^3.7.0",
+    "@typescript-eslint/parser": "^3.7.0",
     "builtin-modules": "^3.1.0",
-    "codecov": "^3.7.0",
+    "codecov": "^3.7.2",
     "dedent": "^0.7.0",
-    "jest": "^26.0.1",
-    "jest-junit": "^10.0.0",
+    "eslint": "^7.5.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^23.18.0",
+    "jest": "^26.1.0",
+    "jest-junit": "^11.0.1",
     "lodash.debounce": "^4.0.8",
     "markdown-it": "^11.0.0",
     "markdown-it-attrs": "^3.0.3",
     "nanoid": "^3.1.10",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.5",
-    "rehype-parse": "^7.0.0",
-    "remark-parse": "^8.0.2",
+    "rehype-parse": "^7.0.1",
+    "remark-parse": "^8.0.3",
     "rimraf": "^3.0.2",
-    "rollup": "^2.16.1",
+    "rollup": "^2.23.0",
     "rollup-plugin-terser": "^6.1.0",
-    "stylelint": "^13.6.0",
-    "stylelint-config-prettier": "^8.0.1",
+    "stylelint": "^13.6.1",
+    "stylelint-config-prettier": "^8.0.2",
     "stylelint-config-standard": "^20.0.0",
-    "ts-jest": "^26.1.0",
-    "tslint": "^6.1.2",
-    "tslint-config-airbnb": "^5.11.2",
-    "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.9.5",
-    "unified": "^9.0.0",
-    "unist-util-visit": "^2.0.2",
+    "ts-jest": "^26.1.3",
+    "typescript": "^3.9.7",
+    "unified": "^9.1.0",
+    "unist-util-visit": "^2.0.3",
     "yaml": "^1.10.0"
   },
   "dependencies": {
-    "@marp-team/marp-cli": "^0.18.1",
-    "@marp-team/marp-core": "^1.2.0",
+    "@marp-team/marp-cli": "^0.20.0",
+    "@marp-team/marp-core": "^1.2.2",
     "axios": "^0.19.2"
   }
 }

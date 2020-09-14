@@ -1,15 +1,11 @@
-import marpCli from '@marp-team/marp-cli'
 import { unlink, writeFile } from 'fs'
-import { nanoid } from 'nanoid'
 import { tmpdir } from 'os'
 import path from 'path'
 import { promisify } from 'util'
+import { nanoid } from 'nanoid'
 import { TextDocument, workspace } from 'vscode'
 import { WorkFile, marpCoreOptionForCLI } from './option'
 import { marpConfiguration } from './utils'
-
-const marpCliAsync = async (): Promise<typeof marpCli> =>
-  (await import('@marp-team/marp-cli')).default
 
 const promiseWriteFile = promisify(writeFile)
 const promiseUnlink = promisify(unlink)
@@ -32,7 +28,9 @@ export async function createWorkFile(doc: TextDocument): Promise<WorkFile> {
   try {
     await promiseWriteFile(sameDirTmpPath, text)
     return { path: sameDirTmpPath, cleanup: createCleanup(sameDirTmpPath) }
-  } catch (e) {}
+  } catch (e) {
+    // no ops
+  }
 
   // If it fails, try to create to the root of workspace
   const documentWorkspace = workspace.getWorkspaceFolder(doc.uri)
@@ -47,7 +45,9 @@ export async function createWorkFile(doc: TextDocument): Promise<WorkFile> {
         path: workspaceDirTmpPath,
         cleanup: createCleanup(workspaceDirTmpPath),
       }
-    } catch (e) {}
+    } catch (e) {
+      // no ops
+    }
   }
 
   // If it fails, create to OS specific tmp directory
@@ -77,52 +77,46 @@ export async function createConfigFile(
   }
 }
 
-export default async function runMarpCli(...opts: string[]): Promise<void> {
-  const argv = ['--no-stdin', ...opts]
+export default async function runMarpCli(...argv: string[]): Promise<void> {
   console.info(`Execute Marp CLI: ${argv.join(' ')}`)
 
-  // Track error log to show better feedback
-  const errors: object[] = []
-  const { error } = console
+  const { marpCli, CLIError, CLIErrorCode } = await import(
+    '@marp-team/marp-cli'
+  )
+  const { CHROME_PATH } = process.env
 
-  console.error = (...args) => {
-    errors.push(...args)
-    return error(...args)
-  }
+  let exitCode: number
 
   try {
-    const marpCliInstance = await marpCliAsync()
-    const { CHROME_PATH } = process.env
+    process.env.CHROME_PATH =
+      marpConfiguration().get<string>('chromePath') || CHROME_PATH
 
-    let exitCode: number
+    exitCode = await marpCli(argv)
+  } catch (e) {
+    console.error(e)
 
-    try {
-      process.env.CHROME_PATH =
-        marpConfiguration().get<string>('chromePath') || CHROME_PATH
+    if (
+      e instanceof CLIError &&
+      e.errorCode === CLIErrorCode.NOT_FOUND_CHROMIUM
+    ) {
+      const chromium =
+        process.platform === 'linux'
+          ? ' or [Chromium](https://www.chromium.org/)'
+          : ''
 
-      exitCode = await marpCliInstance(argv)
-    } finally {
-      process.env.CHROME_PATH = CHROME_PATH
-    }
-
-    if (exitCode !== 0) {
-      for (const err of errors) {
-        if (err.toString().includes('Chromium revision is not downloaded.')) {
-          const chromium =
-            process.platform === 'linux'
-              ? ' or [Chromium](https://www.chromium.org/)'
-              : ''
-
-          throw new MarpCLIError(
-            `It requires to install [Google Chrome](https://www.google.com/chrome/)${chromium} for exporting.`
-          )
-        }
-      }
       throw new MarpCLIError(
-        `Marp CLI throwed unexpected error with exit code ${exitCode}.`
+        `It requires to install [Google Chrome](https://www.google.com/chrome/)${chromium} for exporting.`
       )
     }
+
+    throw e
   } finally {
-    console.error = error
+    process.env.CHROME_PATH = CHROME_PATH
+  }
+
+  if (exitCode !== 0) {
+    throw new MarpCLIError(
+      `Marp CLI throwed unexpected error with exit code ${exitCode}.`
+    )
   }
 }
