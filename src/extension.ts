@@ -1,5 +1,6 @@
 import path from 'path'
 import { Marp } from '@marp-team/marp-core'
+import markdownItAttrs from 'markdown-it-attrs'
 import { ExtensionContext, Uri, commands, workspace } from 'vscode'
 import * as exportCommand from './commands/export'
 import * as openExtensionSettings from './commands/open-extension-settings'
@@ -12,7 +13,6 @@ import lineNumber from './plugins/line-number'
 import outline from './plugins/outline'
 import themes from './themes'
 import { detectMarpFromMarkdown } from './utils'
-import markdownItAttrs from 'markdown-it-attrs'
 
 const shouldRefreshConfs = [
   'markdown.marp.breaks',

@@ -9,7 +9,7 @@ describe('openExtensionSettings command', () => {
 
     expect(commands.executeCommand).toHaveBeenCalledWith(
       'workbench.action.openSettings',
-      '@ext:marp-team.marp-vscode'
+      '@ext:MiguelDomingues.marp-vscode-extended'
     )
   })
 })
