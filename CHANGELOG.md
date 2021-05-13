@@ -2,6 +2,115 @@
 
 ## [Unreleased]
 
+## v0.19.1 - 2021-05-11
+
+### Fixed
+
+- Presenter notes are not applied to PPTX correctly ([#229](https://github.com/marp-team/marp-vscode/issues/229), [#230](https://github.com/marp-team/marp-vscode/pull/230))
+
+### Changed
+
+- Upgrade Marp CLI to [v1.1.0](https://github.com/marp-team/marp-cli/releases/v1.1.0) ([#230](https://github.com/marp-team/marp-vscode/pull/230))
+
+## v0.19.0 - 2021-05-10
+
+### Breaking
+
+- VS Code >= 1.52 is now required ([#225](https://github.com/marp-team/marp-vscode/pull/225))
+
+### Added
+
+- Apply [`markdown.preview.typographer` for VS Code 1.56](https://code.visualstudio.com/updates/v1_56#_markdown-preview-typographer-support) to Marp preview and the export result ([#226](https://github.com/marp-team/marp-vscode/issues/226), [#228](https://github.com/marp-team/marp-vscode/pull/228))
+- Improved support for a [virtual workspace](https://code.visualstudio.com/updates/v1_56#_define-whether-your-extension-supports-a-virtual-workspace) ([#224](https://github.com/marp-team/marp-vscode/issues/224), [#225](https://github.com/marp-team/marp-vscode/pull/225))
+
+### Changed
+
+- Upgrade Marp Core to [v2.0.2](https://github.com/marp-team/marp-core/releases/v2.0.2) ([#228](https://github.com/marp-team/marp-vscode/pull/228))
+- Upgrade Marp CLI to [v1.0.3](https://github.com/marp-team/marp-cli/releases/v1.0.3) ([#228](https://github.com/marp-team/marp-vscode/pull/228))
+
+## v0.18.0 - 2021-05-01
+
+### Added
+
+- Set up automated publication into [Open VSX](https://open-vsx.org/extension/marp-team/marp-vscode) ([#211](https://github.com/marp-team/marp-vscode/issues/211), [#218](https://github.com/marp-team/marp-vscode/pull/218))
+- `markdown.marp.outlineExtension` preference to enable or disable the outline extension ([#212](https://github.com/marp-team/marp-vscode/issues/212), [#221](https://github.com/marp-team/marp-vscode/pull/221))
+
+### Changed
+
+- Upgrade Marp Core to [v2.0.1](https://github.com/marp-team/marp-core/releases/v2.0.1) ([#217](https://github.com/marp-team/marp-vscode/pull/217))
+- Upgrade Marp CLI to [v1.0.1](https://github.com/marp-team/marp-cli/releases/v1.0.1) ([#216](https://github.com/marp-team/marp-vscode/pull/216))
+- Upgrade development Node and dependent packages to the latest ([#220](https://github.com/marp-team/marp-vscode/pull/220))
+
+## v0.17.3 - 2021-03-14
+
+### Fixed
+
+- Conversion into PPTX takes only the first slide if using Chromium >= v89 ([#202](https://github.com/marp-team/marp-vscode/issues/202), [#205](https://github.com/marp-team/marp-vscode/pull/205))
+
+### Changed
+
+- Upgrade Marp CLI to [v0.23.3](https://github.com/marp-team/marp-cli/releases/v0.23.3) ([#205](https://github.com/marp-team/marp-vscode/pull/205))
+- Upgrade dependent packages to the latest version ([#205](https://github.com/marp-team/marp-vscode/pull/205))
+
+## v0.17.2 - 2021-02-11
+
+### Fixed
+
+- KaTeX does not be rendered together with header/footer ([#200](https://github.com/marp-team/marp-vscode/issues/200), [#201](https://github.com/marp-team/marp-vscode/pull/201))
+
+### Changed
+
+- Upgrade to [Marp Core v1.4.3](https://github.com/marp-team/marp-core/releases/v1.4.3) and [Marp CLI v0.23.2](https://github.com/marp-team/marp-cli/releases/v0.23.2) ([#201](https://github.com/marp-team/marp-vscode/pull/201))
+- Upgrade dependent packages to the latest version ([#201](https://github.com/marp-team/marp-vscode/pull/201))
+
+## v0.17.1 - 2021-02-07
+
+### Fixed
+
+- VS Code for Web makes broken slide preview on Safari ([#192](https://github.com/marp-team/marp-vscode/issues/192), [#197](https://github.com/marp-team/marp-vscode/pull/197))
+- Prevent leaking defined MathJax macros into other Markdown preview ([#195](https://github.com/marp-team/marp-vscode/pull/195))
+
+### Changed
+
+- Upgrade to [Marp Core v1.4.2](https://github.com/marp-team/marp-core/releases/v1.4.2) and [Marp CLI v0.23.1](https://github.com/marp-team/marp-cli/releases/v0.23.1) ([#195](https://github.com/marp-team/marp-vscode/pull/195), [#197](https://github.com/marp-team/marp-vscode/pull/197))
+- Upgrade dependent packages to the latest version ([#195](https://github.com/marp-team/marp-vscode/pull/195))
+- Make icons for editor action monochrome, to follow [VS Code extension guideline](https://code.visualstudio.com/api/references/extension-guidelines#editor-actions) ([#193](https://github.com/marp-team/marp-vscode/issues/193), [#196](https://github.com/marp-team/marp-vscode/pull/196))
+- Rename `master` branch to `main` ([#198](https://github.com/marp-team/marp-vscode/pull/198))
+
+## v0.17.0 - 2020-12-05
+
+### Added
+
+- GitHub Actions workflow to upload packaged VSIX into release page ([#182](https://github.com/marp-team/marp-vscode/issues/182), [#188](https://github.com/marp-team/marp-vscode/pull/188))
+
+### Changed
+
+- Upgrade to [Marp Core v1.4.0](https://github.com/marp-team/marp-core/releases/v1.4.0) ([#186](https://github.com/marp-team/marp-vscode/pull/186))
+  - Stopped the confusable auto-detection of syntax highlight for code block
+  - Added support for more emoji shorthands
+- Upgrade to [Marp CLI v0.23.0](https://github.com/marp-team/marp-cli/releases/v0.23.0) ([#186](https://github.com/marp-team/marp-vscode/pull/186))
+  - Export into PDF/image is working with Apple Silicon
+  - Auto-detection of Chromium browser for export has supported Microsoft Edge for Linux
+  - No longer required restarting VS Code after changing `markdown.marp.chromePath` configuration
+- Upgrade development Node LTS to 14 ([#186](https://github.com/marp-team/marp-vscode/pull/186))
+- Upgrade dependent packages to the latest version ([#186](https://github.com/marp-team/marp-vscode/pull/186))
+- Switch package manager from yarn to npm ([#187](https://github.com/marp-team/marp-vscode/pull/187))
+
+## v0.16.0 - 2020-10-19
+
+### Fixed
+
+- Fix broken background images caused by regression in Chrome >= 85, by updated [Marp CLI v0.22.0](https://github.com/marp-team/marp-cli/releases/v0.22.0) ([#175](https://github.com/marp-team/marp-vscode/issues/175), [#176](https://github.com/marp-team/marp-vscode/pull/176))
+
+### Added
+
+- Support for export through installed Microsoft Edge, by updated [Marp CLI v0.22.0](https://github.com/marp-team/marp-cli/releases/v0.22.0) ([#176](https://github.com/marp-team/marp-vscode/pull/176))
+
+### Changed
+
+- Upgrade to [Marp CLI v0.22.0](https://github.com/marp-team/marp-cli/releases/v0.22.0) ([#176](https://github.com/marp-team/marp-vscode/pull/176))
+- Upgrade dependent packages to the latest version ([#177](https://github.com/marp-team/marp-vscode/pull/177))
+
 ## v0.15.1 - 2020-09-16
 
 ### Fixed

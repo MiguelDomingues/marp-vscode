@@ -1,6 +1,7 @@
 /** @jest-environment jsdom */
 import fs from 'fs'
 import path from 'path'
+import { TextEncoder } from 'util'
 import { Marp } from '@marp-team/marp-core'
 import axios from 'axios'
 import dedent from 'dedent'
@@ -24,9 +25,9 @@ const extension = (): typeof import('./extension') => {
   return ext
 }
 
-const setConfiguration: (
-  conf?: Record<string, unknown>
-) => void = (workspace as any)._setConfiguration
+const setConfiguration: (conf?: Record<string, unknown>) => void = (
+  workspace as any
+)._setConfiguration
 
 describe('#activate', () => {
   const extContext: any = { subscriptions: { push: jest.fn() } }
@@ -285,6 +286,113 @@ describe('#extendMarkdownIt', () => {
         expect(
           markdown.render(marpMd('<!-- theme: default -->'))
         ).not.toContain('@custom theme')
+      })
+
+      describe('when the current workspace belongs to the virtual file system', () => {
+        const vfsUri = Object.assign(Uri.parse(baseDir), {
+          scheme: 'vscode-vfs',
+          path: 'vscode-vfs://dummy.host/path/to/workspace',
+          fsPath: '/vscode-vfs/dummy.host/path/to/workspace',
+          toString() {
+            return this.path
+          },
+        })
+
+        beforeEach(() => {
+          jest
+            .spyOn(workspace, 'getWorkspaceFolder')
+            .mockReturnValue({ name: 'vfs', index: 0, uri: vfsUri })
+        })
+
+        it('resolves theme CSS through VS Code FileSystem API', async () => {
+          const wsFsReadfile = jest
+            .spyOn(workspace.fs, 'readFile')
+            .mockResolvedValue(new TextEncoder().encode(css))
+
+          const mdBody = marpMd('<!--theme: example-->')
+
+          setConfiguration({ 'markdown.marp.themes': ['example.css'] })
+          ;(workspace as any).textDocuments = [
+            {
+              languageId: 'markdown',
+              getText: () => mdBody,
+              uri: Uri.parse(vfsUri.path + '/test.md'),
+              fileName: vfsUri.path + '/test.md',
+            } as any,
+          ]
+
+          const markdown = md()
+          await Promise.all(themes.loadStyles(vfsUri))
+
+          expect(wsFsReadfile).toHaveBeenCalledWith(
+            expect.objectContaining({
+              path: expect.stringContaining('vscode-vfs://'),
+            })
+          )
+          expect(markdown.render(mdBody)).toContain(css)
+        })
+      })
+    })
+
+    describe('markdown.marp.outlineExtension', () => {
+      const markdown = dedent`
+        ---
+        marp: true
+        ---
+
+        1
+
+        ---
+
+        2
+      `
+
+      it('adds hidden heading token marked as zero-level if enabled', () => {
+        setConfiguration({ 'markdown.marp.outlineExtension': true })
+
+        const parsed = md().parse(markdown)
+        const hiddenHeadings = parsed.filter(
+          (t) => t.type === 'heading_open' && t.level === 0 && t.hidden
+        )
+
+        expect(hiddenHeadings).toHaveLength(2)
+        expect(hiddenHeadings[0].map[0]).toBe(0)
+        expect(hiddenHeadings[1].map[0]).toBe(6)
+
+        // headingDivider directive
+        const headingDivider = md().parse(dedent`
+          ---
+          marp: true
+          headingDivider: 2
+          ---
+
+          # 1
+
+          ## 2
+
+          ### 3
+
+          ## 4
+        `)
+        const hiddenHeadingDividers = headingDivider.filter(
+          (t) => t.type === 'heading_open' && t.level === 0 && t.hidden
+        )
+
+        expect(hiddenHeadingDividers).toHaveLength(3)
+        expect(hiddenHeadingDividers[0].map[0]).toBe(0)
+        expect(hiddenHeadingDividers[1].map[0]).toBe(7)
+        expect(hiddenHeadingDividers[2].map[0]).toBe(11)
+      })
+
+      it('does not add zero-level heading token if disabled', () => {
+        setConfiguration({ 'markdown.marp.outlineExtension': false })
+
+        const parsed = md().parse(markdown)
+        const hiddenHeadings = parsed.filter(
+          (t) => t.type === 'heading_open' && t.level === 0 && t.hidden
+        )
+
+        expect(hiddenHeadings).toHaveLength(0)
       })
     })
   })

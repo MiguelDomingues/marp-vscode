@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  github-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: marp-team/actions@v1
+        with:
+          task: release
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  upload-vsix:
+    needs: github-release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Detect Node version from .nvmrc
+        id: node_version
+        run: echo "::set-output name=nvmrc::$(cat .nvmrc)"
+
+      - uses: actions/setup-node@v1
+        with:
+          node-version: ${{ steps.node_version.outputs.nvmrc }}
+
+      - run: npm ci
+      - run: npm run package
+
+      - name: Find out created VSIX
+        id: vsix
+        run: echo "::set-output name=name::$(find . -maxdepth 1 -name '*.vsix' -printf '%f\n' | head -n 1)"
+
+      - name: Upload VSIX to GitHub Release
+        uses: marp-team/actions@v1
+        with:
+          task: upload
+          token: ${{ secrets.GITHUB_TOKEN }}
+          files: ${{ steps.vsix.outputs.name }}
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: vsix
+          path: ${{ steps.vsix.outputs.name }}
+
+  publish-to-open-vsx:
+    needs: upload-vsix
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: vsix
+          path: ~/vsix
+
+      - name: Find out downloaded VSIX
+        id: vsix
+        run: echo "::set-output name=path::$(find ~/vsix -maxdepth 1 -name '*.vsix' -printf '%p\n' | head -n 1)"
+
+      - name: Publish to Open VSX Registry
+        uses: HaaLeo/publish-vscode-extension@v0
+        with:
+          pat: ${{ secrets.OPEN_VSX_PAT }}
+          extensionFile: ${{ steps.vsix.outputs.path }}
+          packagePath: ''

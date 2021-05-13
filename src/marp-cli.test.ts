@@ -8,9 +8,9 @@ import * as marpCli from './marp-cli'
 jest.mock('fs')
 jest.mock('vscode')
 
-const setConfiguration: (
-  conf?: Record<string, unknown>
-) => void = (workspace as any)._setConfiguration
+const setConfiguration: (conf?: Record<string, unknown>) => void = (
+  workspace as any
+)._setConfiguration
 
 describe('Marp CLI integration', () => {
   const runMarpCli = marpCli.default
@@ -23,28 +23,50 @@ describe('Marp CLI integration', () => {
 
   it('runs Marp CLI with passed args', async () => {
     const marpCliSpy = jest.spyOn(marpCliModule, 'marpCli')
-    await runMarpCli('--version')
+    await runMarpCli(['--version'])
 
-    expect(marpCliSpy).toHaveBeenCalledWith(['--version'])
+    expect(marpCliSpy).toHaveBeenCalledWith(['--version'], undefined)
   })
 
   it('throws MarpCLIError when returned error exit code', async () => {
     jest.spyOn(marpCliModule, 'marpCli').mockResolvedValue(1)
-    await expect(runMarpCli('--version')).rejects.toThrow(marpCli.MarpCLIError)
+    await expect(runMarpCli(['--version'])).rejects.toThrow(
+      marpCli.MarpCLIError
+    )
   })
 
-  it('throws error with helpful message when outputed error about Chrome', async () => {
-    jest
-      .spyOn(marpCliModule, 'marpCli')
-      .mockRejectedValue(
-        new marpCliModule.CLIError(
-          'mocked error',
-          marpCliModule.CLIErrorCode.NOT_FOUND_CHROMIUM
-        )
-      )
+  it.each`
+    platform    | expected
+    ${'win32'}  | ${[/Google Chrome/, /Microsoft Edge/]}
+    ${'darwin'} | ${[/Google Chrome/, /Microsoft Edge/]}
+    ${'linux'}  | ${[/Google Chrome/, /Chromium/]}
+  `(
+    'contains $expected to suggested browsers in error message when running on $platform',
+    async ({ platform, expected }) => {
+      expect.assertions(expected.length)
 
-    await expect(runMarpCli('--version')).rejects.toThrow(/Google Chrome/)
-  })
+      const originalPlatform = process.platform
+
+      try {
+        Object.defineProperty(process, 'platform', { value: platform })
+
+        jest
+          .spyOn(marpCliModule, 'marpCli')
+          .mockRejectedValue(
+            new marpCliModule.CLIError(
+              'mocked error',
+              marpCliModule.CLIErrorCode.NOT_FOUND_CHROMIUM
+            )
+          )
+
+        for (const fragment of expected) {
+          await expect(runMarpCli(['--version'])).rejects.toThrow(fragment)
+        }
+      } finally {
+        Object.defineProperty(process, 'platform', { value: originalPlatform })
+      }
+    }
+  )
 
   describe('with markdown.marp.chromePath preference', () => {
     it('runs Marp CLI with overridden CHROME_PATH environment', async () => {
@@ -60,7 +82,7 @@ describe('Marp CLI integration', () => {
           return 0
         })
 
-      await runMarpCli('--version')
+      await runMarpCli(['--version'])
       expect(marpCliSpy).toHaveBeenCalled()
       expect(process.env.CHROME_PATH).toBe(CHROME_PATH)
     })
@@ -127,10 +149,6 @@ describe('#createWorkFile', () => {
   })
 
   it('creates tmpfile to os specific directory when failed all creations', async () => {
-    ;(fs as any).writeFile.mockImplementationOnce((_, __, cb) =>
-      cb(new Error())
-    )
-
     const workFile = await createWorkFile({
       getText: jest.fn(),
       isDirty: true,
